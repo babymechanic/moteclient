@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/babymechanic/client/components"
-	"github.com/babymechanic/client/utils"
+	"github.com/babymechanic/moteclient/components"
+	"github.com/babymechanic/moteclient/utils"
 	"github.com/golang/glog"
 	"net/rpc"
 )

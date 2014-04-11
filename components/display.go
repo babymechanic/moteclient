@@ -1,8 +1,8 @@
 package components
 
 import (
-	"github.com/babymechanic/client/utils"
-	"github.com/babymechanic/common/messages"
+	"github.com/babymechanic/moteclient/utils"
+	"github.com/babymechanic/motecommon/messages"
 )
 
 type Display struct {
