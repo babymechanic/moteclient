@@ -3,14 +3,16 @@ package components
 import (
 	"github.com/babymechanic/moteclient/utils"
 	"github.com/babymechanic/motecommon/messages"
+	"net/rpc"
+	"reflect"
 )
 
 type Display struct {
 	invoker *utils.RPCInvoker
 }
 
-func NewDisplay(invoker *utils.RPCInvoker) *Display {
-	return &Display{invoker}
+func (display *Display) Initialize(client *rpc.Client) {
+	display.invoker = utils.NewRPCInvoker(client)
 }
 
 func (display *Display) Resolution() messages.Resolution {
@@ -19,6 +21,13 @@ func (display *Display) Resolution() messages.Resolution {
 	return response
 }
 
-func init() {
+func (display *Display) SetResolution(resolution messages.Resolution) {
+	var response messages.Resolution
+	display.invoker.Invoke("Display.SetResolution", resolution, &response)
+}
 
+func init() {
+	display := &Display{}
+	Register("Display.Resolution", display, reflect.TypeOf(nil), reflect.TypeOf(messages.Resolution{}))
+	Register("Display.SetResolution", display, reflect.TypeOf(messages.Resolution{}), reflect.TypeOf(nil))
 }
