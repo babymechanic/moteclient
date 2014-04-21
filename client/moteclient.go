@@ -4,19 +4,18 @@ import (
 	"fmt"
 	"github.com/babymechanic/moteclient/components"
 	"github.com/babymechanic/moteclient/requestprocessor"
-	"github.com/babymechanic/motecommon/messages"
 	"github.com/golang/glog"
 	"net/rpc"
 )
 
 type MoteClient struct {
-	serverIp   string
-	serverPort int
-	executor   *requestprocessor.CommandExecutor
+	serverIp         string
+	serverPort       int
+	requestProcessor *requestprocessor.RequestProcessor
 }
 
-func New(serverIp string, serverPort int) *MoteClient {
-	return &MoteClient{serverIp: serverIp, serverPort: serverPort, executor: &requestprocessor.CommandExecutor{}}
+func New(serverIp string, serverPort int, listenPort int) *MoteClient {
+	return &MoteClient{serverIp: serverIp, serverPort: serverPort, requestProcessor: requestprocessor.New(listenPort)}
 }
 
 func (moteClient *MoteClient) Start() {
@@ -26,9 +25,7 @@ func (moteClient *MoteClient) Start() {
 }
 
 func (moteClient *MoteClient) handleRequests() {
-	returnValue, _ := moteClient.executor.Execute("Display.Resolution", nil).(messages.Resolution)
-	fmt.Println(returnValue.Width, " x ", returnValue.Height)
-	moteClient.executor.Execute("Display.SetResolution", messages.Resolution{Width: 1920, Height: 1080})
+	moteClient.requestProcessor.ProcessRequests()
 }
 
 func (moteClient *MoteClient) initializeComponents(client *rpc.Client) {
