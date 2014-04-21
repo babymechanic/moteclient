@@ -28,6 +28,7 @@ func (moteClient *MoteClient) Start() {
 func (moteClient *MoteClient) handleRequests() {
 	returnValue, _ := moteClient.executor.Execute("Display.Resolution", nil).(messages.Resolution)
 	fmt.Println(returnValue.Width, " x ", returnValue.Height)
+	moteClient.executor.Execute("Display.SetResolution", messages.Resolution{Width: 1920, Height: 1080})
 }
 
 func (moteClient *MoteClient) initializeComponents(client *rpc.Client) {

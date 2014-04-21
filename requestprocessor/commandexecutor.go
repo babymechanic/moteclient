@@ -16,7 +16,7 @@ func (executor *CommandExecutor) Execute(operation string, request interface{}) 
 	method := valueOfComponent.MethodByName(methodName)
 	inputs := make([]reflect.Value, 0)
 	if request != nil {
-		inputs := make([]reflect.Value, 1)
+		inputs = make([]reflect.Value, 1)
 		inputs[0] = reflect.ValueOf(request)
 	}
 	ouputs := method.Call(inputs)
