@@ -17,7 +17,11 @@ func (operationHandler *OperationHandler) ServeHTTP(writer http.ResponseWriter, 
 	jsonMap := getJsonMap(request)
 	operationName := getOperationName(jsonMap)
 	requestObject := getRequestObject(jsonMap, operationName)
-	operationHandler.executor.Execute(operationName, requestObject)
+	ouput := operationHandler.executor.Execute(operationName, requestObject)
+	if ouput != nil {
+		responseBytes, _ := json.Marshal(ouput)
+		writer.Write(responseBytes)
+	}
 }
 
 func getJsonMap(request *http.Request) map[string]interface{} {
