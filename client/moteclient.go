@@ -21,10 +21,6 @@ func New(serverIp string, serverPort int, listenPort int) *MoteClient {
 func (moteClient *MoteClient) Start() {
 	client := moteClient.getServerConnection()
 	moteClient.initializeComponents(client)
-	moteClient.handleRequests()
-}
-
-func (moteClient *MoteClient) handleRequests() {
 	moteClient.requestProcessor.ProcessRequests()
 }
 

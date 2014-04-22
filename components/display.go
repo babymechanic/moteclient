@@ -3,6 +3,7 @@ package components
 import (
 	"github.com/babymechanic/moteclient/utils"
 	"github.com/babymechanic/motecommon/messages"
+	"github.com/mitchellh/mapstructure"
 	"net/rpc"
 	"reflect"
 )
@@ -21,9 +22,11 @@ func (display *Display) Resolution() messages.Resolution {
 	return response
 }
 
-func (display *Display) SetResolution(resolution messages.Resolution) {
+func (display *Display) SetResolution(resolution interface{}) {
+	castedResolution := messages.Resolution{}
+	mapstructure.Decode(resolution, &castedResolution)
 	var response messages.Resolution
-	display.invoker.Invoke("Display.SetResolution", resolution, &response)
+	display.invoker.Invoke("Display.SetResolution", castedResolution, &response)
 }
 
 func init() {

@@ -1,4 +1,4 @@
-package requestprocessor
+package handlers
 
 import (
 	"github.com/babymechanic/moteclient/components"

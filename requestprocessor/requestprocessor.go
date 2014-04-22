@@ -2,20 +2,23 @@ package requestprocessor
 
 import (
 	"fmt"
-	"github.com/babymechanic/motecommon/messages"
+	"github.com/babymechanic/moteclient/requestprocessor/handlers"
+	"net/http"
 )
-
-type RequestProcessor struct {
-	listenPort      int
-	commandExecutor CommandExecutor
-}
 
 func New(listenPort int) *RequestProcessor {
 	return &RequestProcessor{listenPort: listenPort}
 }
 
+type RequestProcessor struct {
+	listenPort int
+}
+
 func (requestProcessor *RequestProcessor) ProcessRequests() {
-	returnValue, _ := requestProcessor.commandExecutor.Execute("Display.Resolution", nil).(messages.Resolution)
-	fmt.Println(returnValue.Width, " x ", returnValue.Height)
-	requestProcessor.commandExecutor.Execute("Display.SetResolution", messages.Resolution{Width: 1920, Height: 1080})
+	for route, handler := range handlers.Handlers() {
+		fmt.Println("registering route: ", route)
+		http.Handle(route, handler)
+	}
+	fmt.Println("Mote client listening on:", requestProcessor.listenPort)
+	http.ListenAndServe(fmt.Sprintf(":%v", requestProcessor.listenPort), nil)
 }
